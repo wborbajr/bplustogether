@@ -21,30 +21,45 @@ services:
 
   dbmysql:
     image: mysql:latest
-    container_name: mysql_bp
-    restart: always
+    container_name: mysql_container
+    restart: unless-stopped
     # environment:
     #   MYSQL_ROOT_PASSWORD: "mypassword"
     #   MYSQL_DATABASE: "drupal"
     env_file:
-      - database.env # configure postgres
+      - mysql.env # configure postgres
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - 3306:3306/tcp
 
   dbpostgre:
     image : postgres:latest
-    container_name: postgre_bp
-    restart: always
+    container_name: pgsql_container
+    restart: unless-stopped
     # environment:
     # POSTGRES_DB: bptogether
     # POSTGRES_USER: admin
     # POSTGRES_PASSWORD: 123mudar
     # PGDATA: /var/lib/postgresql/data
     env_file:
-      - database.env # configure postgres
+      - mysql.env # configure postgres
     volumes:
       - pgsql_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - 5432:5432/tcp
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_container
+    restart: always
+    depends_on:
+      - dbpostgre
+    ports:
+      - 5454:5454/tcp
+    env_file:
+      - pgadmin.env # configure postgres
+    # environment:
+    #   - PGADMIN_DEFAULT_EMAIL=admin@localhost
+    #   - PGADMIN_DEFAULT_PASSWORD=123mudar
+    #   - PGADMIN_LISTEN_PORT=5454
