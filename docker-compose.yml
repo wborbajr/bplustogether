@@ -27,7 +27,7 @@ services:
     #   MYSQL_ROOT_PASSWORD: "mypassword"
     #   MYSQL_DATABASE: "drupal"
     env_file:
-      - mysql.env # configure postgres
+      - '.config.env'
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
@@ -43,7 +43,7 @@ services:
     # POSTGRES_PASSWORD: 123mudar
     # PGDATA: /var/lib/postgresql/data
     env_file:
-      - mysql.env # configure postgres
+      - '.config.env'
     volumes:
       - pgsql_data:/var/lib/postgresql/data
     ports:
@@ -58,7 +58,7 @@ services:
     ports:
       - 5454:5454/tcp
     env_file:
-      - pgadmin.env # configure postgres
+      - '.config.env'
     # environment:
     #   - PGADMIN_DEFAULT_EMAIL=admin@localhost
     #   - PGADMIN_DEFAULT_PASSWORD=123mudar
