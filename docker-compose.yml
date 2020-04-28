@@ -1,0 +1,32 @@
+version: "3"
+
+volumes:
+  db-data:
+
+services:
+
+  bpapi:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    image: bpapi
+    restart: always
+    depends_on:
+      - "db"
+    volumes:
+      - ./bpapi:/bpapi
+    ports:
+      - "9000:9000"
+
+  db:
+    image : postgres:12.2
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 123mudar
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"

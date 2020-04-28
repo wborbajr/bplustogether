@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "bpapi"
+version = "0.1.0"
+description = "B+ API"
+authors = ["Waldir Borba Junior <wborbajr@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.54.1"
+uvicorn = "^0.11.3"
+loguru = "^0.4.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^4.6"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
