@@ -1,32 +1,50 @@
 version: "3"
 
 volumes:
-  db-data:
+  pgsql_data:
+  mysql_data:
 
 services:
 
-  bpapi:
-    build:
-      context: .
-      dockerfile: ./docker/api/Dockerfile
-    image: bpapi
-    restart: always
-    depends_on:
-      - "db"
-    volumes:
-      - ./bpapi:/bpapi
-    ports:
-      - "9000:9000"
+  # bpapi:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/api/Dockerfile
+  #   image: bpapi
+  #   restart: always
+  #   depends_on:
+  #     - "db"
+  #   volumes:
+  #     - ./bpapi:/bpapi
+  #   ports:
+  #     - "9000:9000"
 
-  db:
-    image : postgres:12.2
+  dbmysql:
+    image: mysql:latest
+    container_name: mysql_bp
     restart: always
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: 123mudar
-      PGDATA: /var/lib/postgresql/data
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: "mypassword"
+    #   MYSQL_DATABASE: "drupal"
+    env_file:
+      - database.env # configure postgres
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  dbpostgre:
+    image : postgres:latest
+    container_name: postgre_bp
+    restart: always
+    # environment:
+    # POSTGRES_DB: bptogether
+    # POSTGRES_USER: admin
+    # POSTGRES_PASSWORD: 123mudar
+    # PGDATA: /var/lib/postgresql/data
+    env_file:
+      - database.env # configure postgres
+    volumes:
+      - pgsql_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
