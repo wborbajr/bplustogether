@@ -2,6 +2,7 @@
 FROM python:3.8-slim-buster AS build-env
 MAINTAINER Waldir Borba Junior <wborbajr@gmail.com>
 ARG POETRY_VERSION=1.0.5
+RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN pip install poetry=="$POETRY_VERSION"
 # Copia o lockfile e pyproject.toml primeiro para cachear melhor a imagem
 COPY ./bpapi/pyproject.toml /bpapi/pyproject.toml

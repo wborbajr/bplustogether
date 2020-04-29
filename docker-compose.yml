@@ -10,7 +10,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/api/Dockerfile
-    # image: bpapi
+    image: bpapi
     container_name: bpapi_container
     restart: always
     depends_on:
@@ -64,3 +64,12 @@ services:
       - 5454:5454/tcp
     env_file:
       - '.config.env'
+
+  web:
+    image: nginx:latest
+    container_name: nginx_container
+    # volumes:
+    #   - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+      - 443:443
