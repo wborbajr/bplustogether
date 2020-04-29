@@ -23,31 +23,33 @@ services:
     image: mysql:latest
     container_name: mysql_container
     restart: unless-stopped
-    # environment:
-    #   MYSQL_ROOT_PASSWORD: "mypassword"
-    #   MYSQL_DATABASE: "drupal"
     env_file:
       - '.config.env'
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
       - 3306:3306/tcp
+    # healthcheck:
+    #   test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+    #   timeout: 45s
+    #   interval: 10s
+    #   retries: 10
 
   dbpostgre:
     image : postgres:latest
     container_name: pgsql_container
-    restart: unless-stopped
-    # environment:
-    # POSTGRES_DB: bptogether
-    # POSTGRES_USER: admin
-    # POSTGRES_PASSWORD: 123mudar
-    # PGDATA: /var/lib/postgresql/data
+    restart: always
     env_file:
       - '.config.env'
     volumes:
       - pgsql_data:/var/lib/postgresql/data
     ports:
       - 5432:5432/tcp
+    # healthcheck:
+    #   test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}" ]
+    #   timeout: 45s
+    #   interval: 10s
+    #   retries: 10
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -55,6 +57,8 @@ services:
     restart: always
     depends_on:
       - dbpostgre
+      # dbpostgre:
+      #   condition: service_healthy
     ports:
       - 5454:5454/tcp
     env_file:
