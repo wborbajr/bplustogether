@@ -1,47 +1,65 @@
-__Author__ = "Waldir Borba Junior"
-__Version__ = "0.0.1"
-__Email__ = "wborbajr@gmail.com"
-__Website__ = ""
+from typing import List
 
-try:
-    # import uvicorn
-    from fastapi import FastAPI
+import databases
+import sqlalchemy
+from fastapi import FastAPI
+from pydantic import BaseModel
 
-    # from redis import Redis
-    import os
-except Exception as e:
-    print("Some modules are missing {}".format(e))
+# SQLAlchemy specific code, as with any other app
+DATABASE_URL = "sqlite:///./bptogether.db"
+# DATABASE_URL = "postgresql://user:password@postgresserver/db"
 
-# used environment variabls from docker-composer
-# if os.environ.get('HOST_REDIS'):
-#     host_redis = os.environ.get('HOST_REDIS')
-# else:
-#     host_redis = 'redis'
+database = databases.Database(DATABASE_URL)
 
-# if os.environ.get('PORT_REDIS'):
-#     host_port = os.environ.get('PORT_REDIS')
-# else:
-#     host_port = 9090
+metadata = sqlalchemy.MetaData()
+
+notes = sqlalchemy.Table(
+    "notes",
+    metadata,
+    sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
+    sqlalchemy.Column("text", sqlalchemy.String),
+    sqlalchemy.Column("completed", sqlalchemy.Boolean),
+)
 
 
-# init app
+engine = sqlalchemy.create_engine(
+    DATABASE_URL, connect_args={"check_same_thread": False}
+)
+metadata.create_all(engine)
+
+
+class NoteIn(BaseModel):
+    text: str
+    completed: bool
+
+
+class Note(BaseModel):
+    id: int
+    text: str
+    completed: bool
+
+
 app = FastAPI()
-# redis = Redis(host=host_redis, port=host_port)
 
 
-# routes
-@app.get("/")
-async def read_root():
-    return {"Hello": "World"}
+@app.on_event("startup")
+async def startup():
+    await database.connect()
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str = None):
-    """
-    /items/{item_id}, returns selected item {"item_id": item_id, "q": q}
-    """
-    return {"item_id": item_id, "q": q}
+@app.on_event("shutdown")
+async def shutdown():
+    await database.disconnect()
 
 
-# if __name__ == '__main__' :
-#     uvicorn.run(app, host="127.0.0.1", port=9090)
+@app.get("/notes/", response_model=List[Note])
+async def read_notes():
+    query = notes.select()
+    return await database.fetch_all(query)
+
+
+@app.post("/notes/", response_model=Note)
+async def create_note(note: NoteIn):
+    query = notes.insert().values(text=note.text, completed=note.completed)
+    last_record_id = await database.execute(query)
+    return {**note.dict(), "id": last_record_id}
