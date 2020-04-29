@@ -1,9 +1,11 @@
 from typing import List
-
 import databases
 import sqlalchemy
-from fastapi import FastAPI
 from pydantic import BaseModel
+from routers import ping
+from fastapi import Depends, FastAPI, Header, HTTPException
+
+
 
 # SQLAlchemy specific code, as with any other app
 DATABASE_URL = "sqlite:///./bptogether.db"
@@ -52,14 +54,31 @@ async def shutdown():
     await database.disconnect()
 
 
-@app.get("/notes/", response_model=List[Note])
-async def read_notes():
-    query = notes.select()
-    return await database.fetch_all(query)
+# @app.get("/notes/", response_model=List[Note])
+# async def read_notes():
+#     query = notes.select()
+#     return await database.fetch_all(query)
+#
+#
+# @app.post("/notes/", response_model=Note)
+# async def create_note(note: NoteIn):
+#     query = notes.insert().values(text=note.text, completed=note.completed)
+#     last_record_id = await database.execute(query)
+#     return {**note.dict(), "id": last_record_id}
+#
 
 
-@app.post("/notes/", response_model=Note)
-async def create_note(note: NoteIn):
-    query = notes.insert().values(text=note.text, completed=note.completed)
-    last_record_id = await database.execute(query)
-    return {**note.dict(), "id": last_record_id}
+app.include_router(ping.router)
+
+# async def get_token_header(x_token: str = Header(...)):
+#     if x_token != "fake-super-secret-token":
+#         raise HTTPException(status_code=400, detail="X-Token header invalid")
+
+# app.include_router(users.router)
+# app.include_router(
+#     items.router,
+#     prefix="/items",
+#     tags=["items"],
+#     dependencies=[Depends(get_token_header)],
+#     responses={404: {"description": "Not found"}},
+# )
