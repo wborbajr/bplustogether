@@ -21,8 +21,8 @@ services:
       - "9090:9090"
 
   dbmysql:
-    image: mysql:latest
-    container_name: mysql_container
+    image: mariadb:latest
+    container_name: mariadb_container
     restart: unless-stopped
     env_file:
       - '.config.env'
@@ -37,7 +37,7 @@ services:
       retries: 10
 
   dbpostgre:
-    image : postgres:latest
+    image : postgres:12.2-alpine
     container_name: pgsql_container
     restart: always
     env_file:
