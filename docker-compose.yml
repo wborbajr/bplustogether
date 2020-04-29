@@ -6,18 +6,19 @@ volumes:
 
 services:
 
-  # bpapi:
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/api/Dockerfile
-  #   image: bpapi
-  #   restart: always
-  #   depends_on:
-  #     - "db"
-  #   volumes:
-  #     - ./bpapi:/bpapi
-  #   ports:
-  #     - "9000:9000"
+  bpapi:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    # image: bpapi
+    container_name: bpapi_container
+    restart: always
+    depends_on:
+      - dbpostgre
+    volumes:
+      - ./bpapi:/bpapi
+    ports:
+      - "9090:9090"
 
   dbmysql:
     image: mysql:latest
@@ -63,7 +64,3 @@ services:
       - 5454:5454/tcp
     env_file:
       - '.config.env'
-    # environment:
-    #   - PGADMIN_DEFAULT_EMAIL=admin@localhost
-    #   - PGADMIN_DEFAULT_PASSWORD=123mudar
-    #   - PGADMIN_LISTEN_PORT=5454
