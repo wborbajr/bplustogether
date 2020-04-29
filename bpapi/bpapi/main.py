@@ -12,7 +12,7 @@ from loguru import logger
 
 # log
 logger.add(
-    "file.log", format="{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}"
+    "../logs/bpapi.log", format="{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}"
 )
 
 metadata.create_all(engine)
