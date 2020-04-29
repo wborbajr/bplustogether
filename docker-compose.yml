@@ -30,11 +30,11 @@ services:
       - mysql_data:/var/lib/mysql
     ports:
       - 3306:3306/tcp
-    # healthcheck:
-    #   test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-    #   timeout: 45s
-    #   interval: 10s
-    #   retries: 10
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 30s
+      interval: 10s
+      retries: 10
 
   dbpostgre:
     image : postgres:latest
