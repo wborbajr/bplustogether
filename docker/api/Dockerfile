@@ -1,6 +1,5 @@
 # Faz o build do projeto dentro do docker
 FROM python:3.8-slim-buster AS build-env
-MAINTAINER Waldir Borba Junior <wborbajr@gmail.com>
 ARG POETRY_VERSION=1.0.5
 RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN pip install poetry=="$POETRY_VERSION"
@@ -12,7 +11,6 @@ RUN poetry build
 
 # Instala e roda o projeto já empacotado
 FROM python:3.8-slim-buster AS exec-env
-MAINTAINER Waldir Borba Junior <wborbajr@gmail.com>
 COPY --from=build-env /bpapi/dist .
 RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN pip install *.whl

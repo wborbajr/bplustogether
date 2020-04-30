@@ -20,6 +20,35 @@ services:
     ports:
       - "9090:9090"
 
+  dbpostgre:
+    image : postgres:12.2-alpine
+    container_name: pgsql_container
+    restart: on-failure
+    env_file:
+      - '.config.env'
+    volumes:
+      - pgsql_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432/tcp
+    healthcheck:
+      test: ["CMD", "psql -h 'localhost' -U 'admin' -c '\\l'"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   container_name: pgadmin_container
+  #   restart: always
+  #   depends_on:
+  #     - dbpostgre
+  #     # dbpostgre:
+  #     #   condition: service_healthy
+  #   ports:
+  #     - 5454:5454/tcp
+  #   env_file:
+  #     - '.config.env'
+
   # dbmysql:
   #   image: mariadb/server
   #   container_name: mariadb_container
@@ -39,40 +68,3 @@ services:
   #     timeout: 30s
   #     interval: 10s
   #     retries: 10
-
-  dbpostgre:
-    image : postgres:12.2-alpine
-    container_name: pgsql_container
-    restart: on-failure
-    env_file:
-      - '.config.env'
-    volumes:
-      - pgsql_data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432/tcp
-    healthcheck:
-      # test: [ "CMD", "pg_isready", "-q", "-U", "postgres" ]
-      test: ["CMD", "psql -h 'localhost' -U 'admin' -c '\\l'"]
-      timeout: 45s
-      interval: 10s
-      retries: 10
-
-  # pgadmin:
-  #   image: dpage/pgadmin4:latest
-  #   container_name: pgadmin_container
-  #   restart: always
-  #   depends_on:
-  #     - dbpostgre
-  #     # dbpostgre:
-  #     #   condition: service_healthy
-  #   ports:
-  #     - 5454:5454/tcp
-  #   env_file:
-  #     - '.config.env'
-
-  web:
-    image: nginx:latest
-    container_name: nginx_container
-    ports:
-      - 80:80
-      - 443:443

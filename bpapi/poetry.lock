@@ -1,5 +1,5 @@
 [[package]]
-category = "dev"
+category = "main"
 description = "asyncio bridge to the standard sqlite3 module"
 name = "aiosqlite"
 optional = false
@@ -89,6 +89,29 @@ mysql = ["aiomysql", "pymysql"]
 postgresql = ["asyncpg", "psycopg2-binary"]
 "postgresql+aiopg" = ["aiopg"]
 sqlite = ["aiosqlite"]
+
+[[package]]
+category = "main"
+description = "The dynamic configurator for your Python Project"
+name = "dynaconf"
+optional = false
+python-versions = "*"
+version = "2.2.3"
+
+[package.dependencies]
+click = "*"
+python-box = "<4.0.0"
+python-dotenv = "*"
+toml = "*"
+
+[package.extras]
+all = ["redis", "pyyaml", "configobj", "hvac"]
+configobj = ["configobj"]
+ini = ["configobj"]
+redis = ["redis"]
+toml = ["toml"]
+vault = ["hvac"]
+yaml = ["pyyaml"]
 
 [[package]]
 category = "main"
@@ -255,6 +278,28 @@ version = ">=4.0.0"
 testing = ["argcomplete", "hypothesis (>=3.56)", "nose", "requests", "mock"]
 
 [[package]]
+category = "main"
+description = "Advanced Python dictionaries with dot notation access"
+name = "python-box"
+optional = false
+python-versions = "*"
+version = "3.4.6"
+
+[package.extras]
+testing = ["pytest", "coverage (>=3.6)", "pytest-cov"]
+
+[[package]]
+category = "main"
+description = "Add .env support to your django/flask apps in development and deployments"
+name = "python-dotenv"
+optional = false
+python-versions = "*"
+version = "0.13.0"
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
 category = "dev"
 description = "Alternative regular expression module, to replace re."
 name = "regex"
@@ -302,7 +347,7 @@ version = "0.13.2"
 full = ["aiofiles", "graphene", "itsdangerous", "jinja2", "python-multipart", "pyyaml", "requests", "ujson"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Python Library for Tom's Obvious, Minimal Language"
 name = "toml"
 optional = false
@@ -373,7 +418,7 @@ version = "1.0.1"
 dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 
 [metadata]
-content-hash = "599ad36971c2692e5285562a9a70e737e725393bd147791e3d61141a03071a49"
+content-hash = "63797fcc1d95720adf66bf5edab0b643299d206d9f64d0f29fe55079b0f7abc1"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -406,6 +451,10 @@ colorama = [
 ]
 databases = [
     {file = "databases-0.3.1.tar.gz", hash = "sha256:92b7f66c74d21eba54899ba88352311019131fb01ceaf076452949429e8d1b12"},
+]
+dynaconf = [
+    {file = "dynaconf-2.2.3-py2.py3-none-any.whl", hash = "sha256:e803cdab2d7addd539c4ee8d121f15ab0b63a83a5b723150e1746aa7e8063adb"},
+    {file = "dynaconf-2.2.3.tar.gz", hash = "sha256:26b84f2b234a203f6005463d954c9f007181c09345eaaab3fc38503acbdadc7d"},
 ]
 fastapi = [
     {file = "fastapi-0.54.1-py3-none-any.whl", hash = "sha256:1ee9a49f28d510b62b3b51a9452b274853bfc9c5d4b947ed054366e2d49f9efa"},
@@ -483,6 +532,14 @@ pyparsing = [
 pytest = [
     {file = "pytest-4.6.9-py2.py3-none-any.whl", hash = "sha256:c77a5f30a90e0ce24db9eaa14ddfd38d4afb5ea159309bdd2dae55b931bc9324"},
     {file = "pytest-4.6.9.tar.gz", hash = "sha256:19e8f75eac01dd3f211edd465b39efbcbdc8fc5f7866d7dd49fedb30d8adf339"},
+]
+python-box = [
+    {file = "python-box-3.4.6.tar.gz", hash = "sha256:694a7555e3ff9fbbce734bbaef3aad92b8e4ed0659d3ed04d56b6a0a0eff26a9"},
+    {file = "python_box-3.4.6-py2.py3-none-any.whl", hash = "sha256:a71d3dc9dbaa34c8597d3517c89a8041bd62fa875f23c0f3dad55e1958e3ce10"},
+]
+python-dotenv = [
+    {file = "python-dotenv-0.13.0.tar.gz", hash = "sha256:3b9909bc96b0edc6b01586e1eed05e71174ef4e04c71da5786370cebea53ad74"},
+    {file = "python_dotenv-0.13.0-py2.py3-none-any.whl", hash = "sha256:25c0ff1a3e12f4bde8d592cc254ab075cfe734fc5dd989036716fd17ee7e5ec7"},
 ]
 regex = [
     {file = "regex-2020.4.4-cp27-cp27m-win32.whl", hash = "sha256:90742c6ff121a9c5b261b9b215cb476eea97df98ea82037ec8ac95d1be7a034f"},
