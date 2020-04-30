@@ -1,18 +1,17 @@
 from typing import List
 
 from fastapi import Depends, FastAPI, Header, HTTPException
+from loguru import logger
 
 # importing database connection
 from db.dbconfig import database, engine, metadata
-
 # importing routes
-from routers import ping
-
-from loguru import logger
+from routers import notes, ping
 
 # log
 logger.add(
-    "../logs/bpapi.log", format="{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}"
+    "../logs/bpapi.log",
+    format="{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}",
 )
 
 metadata.create_all(engine)
@@ -34,3 +33,4 @@ async def shutdown():
 
 
 app.include_router(ping.router)
+app.include_router(notes.router, prefix="/notes", tags=["notes"])
