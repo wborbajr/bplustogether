@@ -1,6 +1,7 @@
-from databases import Database
 from sqlalchemy import (ARRAY, Column, DateTime, Integer, MetaData, String,
                         Table, create_engine, func)
+
+from databases import Database
 
 # SQLAlchemy specific code, as with any other app
 DATABASE_URL = "sqlite:///./bptogether.db"

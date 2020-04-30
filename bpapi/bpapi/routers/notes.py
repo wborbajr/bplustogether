@@ -1,9 +1,8 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException, Path
-
 from db import crud
 from db.models import NoteDB, NoteSchema
+from fastapi import APIRouter, HTTPException, Path
 
 router = APIRouter()
 

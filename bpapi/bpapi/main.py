@@ -1,10 +1,9 @@
 from typing import List
 
-from fastapi import Depends, FastAPI, Header, HTTPException
-from loguru import logger
-
 # importing database connection
 from db.dbconfig import database, engine, metadata
+from fastapi import Depends, FastAPI, Header, HTTPException
+from loguru import logger
 # importing routes
 from routers import notes, ping
 
