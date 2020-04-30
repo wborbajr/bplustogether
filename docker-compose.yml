@@ -13,6 +13,10 @@ services:
     image: bpapi
     container_name: bpapi_container
     restart: always
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.DaemonName}}(image={{.ImageName}};name={{.Name}};id={{.ID}})"
     depends_on:
       - dbpostgre
     volumes:
@@ -20,56 +24,63 @@ services:
     ports:
       - "9090:9090"
 
-  dbmysql:
-    image: mariadb:latest
-    container_name: mariadb_container
-    restart: unless-stopped
-    env_file:
-      - '.config.env'
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - 3306:3306/tcp
-    healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      timeout: 30s
-      interval: 10s
-      retries: 10
+  # dbmysql:
+  #   image: mariadb/server
+  #   container_name: mariadb_container
+  #   restart: on-failure
+  #   env_file:
+  #     - '.config.env'
+  #   logging:
+  #     driver: syslog
+  #     options:
+  #       tag: "{{.DaemonName}}(image={{.ImageName}};name={{.Name}};id={{.ID}})"
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   ports:
+  #     - 3306:3306/tcp
+  #   healthcheck:
+  #     test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+  #     timeout: 30s
+  #     interval: 10s
+  #     retries: 10
 
   dbpostgre:
     image : postgres:12.2-alpine
     container_name: pgsql_container
-    restart: always
+    restart: on-failure
     env_file:
       - '.config.env'
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.DaemonName}}(image={{.ImageName}};name={{.Name}};id={{.ID}})"
     volumes:
       - pgsql_data:/var/lib/postgresql/data
     ports:
       - 5432:5432/tcp
-    # healthcheck:
-    #   test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}" ]
-    #   timeout: 45s
-    #   interval: 10s
-    #   retries: 10
+    healthcheck:
+      # test: [ "CMD", "pg_isready", "-q", "-U", "postgres" ]
+      test: ["CMD", "psql -h 'localhost' -U 'admin' -c '\\l'"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: pgadmin_container
-    restart: always
-    depends_on:
-      - dbpostgre
-      # dbpostgre:
-      #   condition: service_healthy
-    ports:
-      - 5454:5454/tcp
-    env_file:
-      - '.config.env'
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   container_name: pgadmin_container
+  #   restart: always
+  #   depends_on:
+  #     - dbpostgre
+  #     # dbpostgre:
+  #     #   condition: service_healthy
+  #   ports:
+  #     - 5454:5454/tcp
+  #   env_file:
+  #     - '.config.env'
 
   web:
     image: nginx:latest
     container_name: nginx_container
-    # volumes:
-    #   - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - 80:80
       - 443:443

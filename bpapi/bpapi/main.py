@@ -1,11 +1,11 @@
 from typing import List
 
 # importing database connection
-from db.dbconfig import database, engine, metadata
+from bpapi.db.dbconfig import database, engine, metadata
 from fastapi import Depends, FastAPI, Header, HTTPException
 from loguru import logger
 # importing routes
-from routers import notes, ping
+from bpapi.routers import notes, ping
 
 # log
 logger.add(
