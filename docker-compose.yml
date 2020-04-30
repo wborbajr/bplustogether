@@ -30,11 +30,34 @@ services:
       - pgsql_data:/var/lib/postgresql/data
     ports:
       - 5432:5432/tcp
+    # networks:
+    #   - psql-pgql      
     healthcheck:
       test: ["CMD", "psql -h 'localhost' -U 'admin' -c '\\l'"]
       timeout: 45s
       interval: 10s
       retries: 10
+
+  # graphql:
+  #   container_name: graphile_container
+  #   restart: always
+  #   image: graphile/postgraphile
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     DATABASE_URL: postgres://postgres:1234@db:5432/your_database # To be moved to environment file
+  #   expose:
+  #     - 5000
+  #   ports:
+  #     - 5000:5000
+  #   command: ["postgraphile", "--connection", $DATABASE_URL, "--host", "0.0.0.0", "--port", "5000", "--schema", "your_schema"]
+  #   links:
+  #     - dbpostgre
+  #   networks:
+  #     - psql-pgql-network
+
+  # networks:
+  #   psql-pgql-network:
 
   # pgadmin:
   #   image: dpage/pgadmin4:latest
