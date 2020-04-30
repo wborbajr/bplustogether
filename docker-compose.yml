@@ -13,10 +13,6 @@ services:
     image: bpapi
     container_name: bpapi_container
     restart: always
-    logging:
-      driver: syslog
-      options:
-        tag: "{{.DaemonName}}(image={{.ImageName}};name={{.Name}};id={{.ID}})"
     depends_on:
       - dbpostgre
     volumes:
@@ -50,10 +46,6 @@ services:
     restart: on-failure
     env_file:
       - '.config.env'
-    logging:
-      driver: syslog
-      options:
-        tag: "{{.DaemonName}}(image={{.ImageName}};name={{.Name}};id={{.ID}})"
     volumes:
       - pgsql_data:/var/lib/postgresql/data
     ports:

@@ -130,3 +130,4 @@ dmypy.json
 
 # B+ Together
 .config.env
+.DS_Store

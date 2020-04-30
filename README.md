@@ -2,7 +2,7 @@
 B+ Together
 
 # Build
-docker-compose build --no-cache --pull
+docker-compose -f docker-compose.yml up -d --build --no-cache --pull
 
 # Run
 docker-compose up -d
